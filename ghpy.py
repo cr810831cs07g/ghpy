@@ -1,6 +1,5 @@
-#from _typeshed import NoneType
-
-import requests
+# -*- coding: utf8 -*-
+import requests, re
 from bs4 import BeautifulSoup
 import sensitive
 
@@ -35,6 +34,7 @@ for link in stories:
     links = link.select_one("h3").getText()
     print("{}:{}".format(link_count,links))
     href = link.find("a", {"class":"fl"})
+    #print(href)
     try:
         url = href.get('href')
         print(url)
@@ -58,8 +58,10 @@ while True:
             print(link.select_one("h3").getText())
             href = link.find("a", {"class":"fl"})
             try:
-            #href.get('href') is not None
-                print(href.get('href'))
+                url = href.get('href')
+                print(url)
+                sensitive.sen(url)
+                
             except:
                 print("Web cache no here!")
     except:
