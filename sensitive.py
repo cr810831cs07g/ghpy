@@ -9,7 +9,8 @@ import os, pandas
 
 #df = { 'TITLE':[], 'URL':[], 'RESULT':[] }   10/18
 
-def sen(url):          
+def sen(url):  
+    x = {"username": [], "id":[], "ph_no":[], "em":[], "address":[], "bir":[]}        
     # --------------比對姓名-------------------------
     os.chdir('/Users/naco/Desktop/regex_name') # 黑名單字串路徑
 
@@ -29,7 +30,7 @@ def sen(url):
     for result in filterList:
         username.append(result)
     username = pandas.unique(username).tolist()
-    name_count = len(username)
+    x["username"] = username
     #-----------------------------------------------
 
     #--------------比對身分證-------------------------
@@ -42,7 +43,7 @@ def sen(url):
     for results in result:
         id.append(results)
     id = pandas.unique(id).tolist()
-    id_count = len(id)
+    x["id"] = id
     #-----------------------------------------------    
     
 #def ph(list):               # 比對電話
@@ -60,7 +61,7 @@ def sen(url):
         ph_no.append(hm)
         #print("{} :{}".format(i, hm))
     ph_no = pandas.unique(ph_no).tolist()
-    phone_count = len(ph_no)
+    x["ph_no"] = ph_no
     #-----------------------------------------------
 #def ma(url):                # 比對信箱
     regex = r"([a-zA-Z0-9_+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)"
@@ -70,7 +71,7 @@ def sen(url):
         em.append(emails)
         #print("{} :{}".format(i, email))
     em = pandas.unique(em).tolist()
-    mail_count = len(em)
+    x["em"] = em
     #-----------------------------------------------
 #def addr(list):             # 比對地址
     pattern= '[\u53f0\u5317\u5e02].{5,20}[\u865f]' 
@@ -85,7 +86,7 @@ def sen(url):
         address.append(addr)
         #print ("{} :{}".format(i,addr))
     address = pandas.unique(address).tolist()
-    addr_count = len(address)
+    x["address"] = address
     #-----------------------------------------------
 #def bd(url):                # 比對生日
     vids_pattern = r'((?:^19\d{2}|20[01]\d|202[0-2])(?:年|/|-|)(?:0[1-9]|1[0-2]|[1-9])(?:月|/|-|)(?:0\d|3[0-1]|[1-9]|[1-2]\d))'
@@ -101,10 +102,8 @@ def sen(url):
         bir.append(roc_bir)
         #print("{} :民國{}".format(i,roc_bir))
     bir = pandas.unique(bir).tolist()
-    bd_count = len(bir)
+    x["bir"] = bir
     #-----------------------------------------------
-    print("疑似洩漏{}姓名,{}身分證,{}電話,{}信箱,{}地址,{}生日".format(name_count, id_count, phone_count, mail_count, addr_count, bd_count))
+    return x
+    #(username, id, ph_no, em, address, bir)
     #print('-----------------------------------------------')
-
-
-    
