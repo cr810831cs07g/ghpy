@@ -23,7 +23,7 @@ result = requests.get("https://www.google.com/search?q=site%3A"+site+keyword+ext
                       #params=params)
 with open(site + '.csv', 'w') as f:
     writer = csv.writer(f)
-    writer.writerow(['Title', 'URL', 'Rusult'])
+    writer.writerow(['No', 'Title', 'Rusult', 'URL'])
 
     sp = BeautifulSoup(result.text, 'html.parser')
 
@@ -42,12 +42,12 @@ with open(site + '.csv', 'w') as f:
         try:
             url = href.get('href')
             print(url)
-            sensitive.sen(url)
             res = sensitive.sen(url)
-            writer.writerow([links, url, res])
+            count = '疑似洩漏{}姓名,{}身分證,{}電話,{}信箱,{}地址,{}生日'.format(len(res["username"]),len(res["id"]),len(res["ph_no"]),len(res["em"]),len(res["address"]),len(res["bir"]))
+            writer.writerow([link_count, links, count, url])
         except:
             print("----Web cache no here!----")
-
+            writer.writerow([link_count, links, 'NO web cache'])
     while True:
         try:
             page = sp.find(id="pnnext").get('href')
@@ -61,15 +61,19 @@ with open(site + '.csv', 'w') as f:
             stories = sp.find_all(class_ = 'yuRUbf')
 
             for link in stories:
+                link_count += 1
                 print(link.select_one("h3").getText())
                 href = link.find("a", {"class":"fl"})
                 try:
                     url = href.get('href')
                     print(url)
-                    sensitive.sen(url)
+                    res = sensitive.sen(url)
+                    count = '疑似洩漏{}姓名,{}身分證,{}電話,{}信箱,{}地址,{}生日'.format(len(res["username"]),len(res["id"]),len(res["ph_no"]),len(res["em"]),len(res["address"]),len(res["bir"]))
+                    writer.writerow([link_count, links, count, url])
                     
                 except:
                     print("Web cache no here!")
+                    writer.writerow([link_count, links, 'NO web cache'])
         except:
             pass
             break
